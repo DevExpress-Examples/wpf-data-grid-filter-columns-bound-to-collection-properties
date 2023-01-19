@@ -106,9 +106,9 @@ With these setting the seraching functionality of Filter Drop-Down doesn't work.
 ## Files to Review
 
 * [Window1.xaml](./CS/FilterDropDown_AgregateOperators/MainWindow.xaml) (VB: [Window1.xaml](./VB/FilterDropDown_AgregateOperators/MainWindow.xaml))
-* [InToAggregatePatcher.cs](./CS/FilterDropDown_AgregateOperators/Behaviours/InToAggregatePatcher.cs) (VB: [Window1.xaml](./VB/FilterDropDown_AgregateOperators/Behaviours/InToAggregatePatcher.vb))
-* [FilterDropDownAggregateOperatorBehavior.cs](./CS/FilterDropDown_AgregateOperators/Behaviours/FilterDropDownAggregateOperatorBehavior.cs) (VB: [Window1.xaml](./VB/FilterDropDown_AgregateOperators/Behaviours/FilterDropDownAggregateOperatorBehavior.vb))
-* [ExcelColumnFilterRestoreCheckedStateBehavior.cs](./CS/FilterDropDown_AgregateOperators/Behaviours/ExcelColumnFilterRestoreCheckedStateBehavior.cs) (VB: [Window1.xaml](./VB/FilterDropDown_AgregateOperators/Behaviours/ExcelColumnFilterRestoreCheckedStateBehavior.vb))
+* [InToAggregatePatcher.cs](./CS/FilterDropDown_AgregateOperators/Behaviours/InToAggregatePatcher.cs) (VB: [InToAggregatePatcher.vb](./VB/FilterDropDown_AgregateOperators/Behaviours/InToAggregatePatcher.vb))
+* [FilterDropDownAggregateOperatorBehavior.cs](./CS/FilterDropDown_AgregateOperators/Behaviours/FilterDropDownAggregateOperatorBehavior.cs) (VB: [FilterDropDownAggregateOperatorBehavior.vb](./VB/FilterDropDown_AgregateOperators/Behaviours/FilterDropDownAggregateOperatorBehavior.vb))
+* [ExcelColumnFilterRestoreCheckedStateBehavior.cs](./CS/FilterDropDown_AgregateOperators/Behaviours/ExcelColumnFilterRestoreCheckedStateBehavior.cs) (VB: [ExcelColumnFilterRestoreCheckedStateBehavior.vb](./VB/FilterDropDown_AgregateOperators/Behaviours/ExcelColumnFilterRestoreCheckedStateBehavior.vb))
 
 ## Documentation
 
