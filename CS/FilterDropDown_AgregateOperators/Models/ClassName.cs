@@ -15,7 +15,6 @@ namespace FilterDropDown_AgregateOperators {
             set { this.SetProperty(ref this._Age, value, "Age"); }
         }
 
-
         protected object _Genres;
         public object Genres {
             get { return this._Genres; }

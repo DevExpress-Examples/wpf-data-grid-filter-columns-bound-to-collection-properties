@@ -1,13 +1,11 @@
 ﻿using DevExpress.Data.Filtering;
 using DevExpress.Data.Filtering.Helpers;
-using DevExpress.Internal.WinApi.Windows.UI.Notifications;
 using System.Linq;
 
-namespace FilterDropDown_AgregateOperators.Behaviours {
+namespace FilterDropDown_AgregateOperators.Behaviors {
     public class InToAggregatePatcher : ClientCriteriaLazyPatcherBase.AggregatesCommonProcessingBase {
 
         public static string FieldName;
-
         public static string DataItemId;
         public static CriteriaOperator Patch(CriteriaOperator source) {
             return new InToAggregatePatcher().Process(source);
@@ -23,7 +21,6 @@ namespace FilterDropDown_AgregateOperators.Behaviours {
                 var newOperator = CriteriaOperator.Parse(FieldName + "[" + inOperator.ToString() + "]");
                 return newOperator;
             }
-
             return result;
         }
     }
