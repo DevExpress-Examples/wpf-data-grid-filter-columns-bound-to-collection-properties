@@ -3,7 +3,7 @@ Imports DevExpress.Xpf.Grid
 Imports System.Collections.Generic
 Imports System.Windows
 
-Namespace FilterDropDown_AgregateOperators.Behaviours
+Namespace FilterDropDown_AgregateOperators.Behaviors
 
     Friend Class FilterDropDownAggregateOperatorBehavior
         Inherits Behavior(Of GridControl)

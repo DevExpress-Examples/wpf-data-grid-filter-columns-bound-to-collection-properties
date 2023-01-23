@@ -26,14 +26,14 @@ Namespace FilterDropDown_AgregateOperators.ViewModels
             End Set
         End Property
 
-        Protected _Genres As ObservableCollection(Of Genre)
+        Protected _Genres As List(Of Object)
 
-        Public Property Genres As ObservableCollection(Of Genre)
+        Public Property Genres As List(Of Object)
             Get
                 Return _Genres
             End Get
 
-            Set(ByVal value As ObservableCollection(Of Genre))
+            Set(ByVal value As List(Of Object))
                 SetProperty(_Genres, value, "Genres")
             End Set
         End Property
@@ -41,11 +41,11 @@ Namespace FilterDropDown_AgregateOperators.ViewModels
 
     Public Class GridData
 
-        Public Shared Function GetGenres() As ObservableCollection(Of Genre)
-            Return New ObservableCollection(Of Genre)(Enumerable.Range(0, 10).[Select](Function(c) New Genre() With {.Value = c, .Name = "Genre #" & c}))
+        Public Shared Function GetGenres() As List(Of Object)
+            Return New List(Of Object)(Enumerable.Range(0, 10).[Select](Function(c) New Genre() With {.Value = c, .Name = "Genre #" & c}))
         End Function
 
-        Public Shared Function GetDataItems(ByVal genres As IList(Of Genre)) As ObservableCollection(Of ClassName)
+        Public Shared Function GetDataItems(ByVal genres As IList(Of Object)) As ObservableCollection(Of ClassName)
             Dim data As ObservableCollection(Of ClassName) = New ObservableCollection(Of ClassName)()
             Dim r As Random = New Random()
             Dim i As Integer = -1

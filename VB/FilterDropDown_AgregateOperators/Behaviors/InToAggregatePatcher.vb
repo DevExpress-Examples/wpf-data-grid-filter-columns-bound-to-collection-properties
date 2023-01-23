@@ -2,7 +2,7 @@ Imports DevExpress.Data.Filtering
 Imports DevExpress.Data.Filtering.Helpers
 Imports System.Linq
 
-Namespace FilterDropDown_AgregateOperators.Behaviours
+Namespace FilterDropDown_AgregateOperators.Behaviors
 
     Public Class InToAggregatePatcher
         Inherits ClientCriteriaLazyPatcherBase.AggregatesCommonProcessingBase
