@@ -46,9 +46,7 @@ Perform the following actions in the [DataViewBase.ShowFilterPopup](https://docs
 ```xaml
 <dxg:GridControl ...>
     <dxmvvm:Interaction.Behaviors>
-        <behaviors:FilterDropDownAggregateOperatorBehavior 
-            CollectionColumnFieldName="Genres" 
-            DataItemId="Value" 
+        <behaviors:FilterDropDownAggregateOperatorBehavior
             ColumnItemsSource="{Binding Genres}"/>
     </dxmvvm:Interaction.Behaviors>
 </dxg:GridControl>
@@ -65,6 +63,61 @@ internal class FilterDropDownAggregateOperatorBehavior : Behavior<GridControl> {
     }
 }
 ```
+
+
+### Implement Filter Operations
+
+Use the [GridControl.SubstituteFilter](https://docs.devexpress.com/WPF/DevExpress.Xpf.Grid.GridControl.SubstituteFilter) event to update the grid filter:
+
+```xaml
+<dxg:GridControl ...>
+    <dxmvvm:Interaction.Behaviors>
+        <behaviors:FilterDropDownAggregateOperatorBehavior 
+            CollectionColumnFieldName="Genres" 
+            DataItemId="Value" 
+            ColumnItemsSource="{Binding Genres}"/>
+    </dxmvvm:Interaction.Behaviors>
+</dxg:GridControl>
+```
+
+```cs
+internal class FilterDropDownAggregateOperatorBehavior : Behavior<GridControl> {
+    // ...
+    private void AssociatedObject_SubstituteFilter(object sender, DevExpress.Data.SubstituteFilterEventArgs e) {
+        InToAggregatePatcher.FieldName = CollectionColumnFieldName;
+        InToAggregatePatcher.DataItemId = DataItemId;
+        e.Filter = InToAggregatePatcher.Patch(e.Filter);
+    }
+}
+```
+
+The `ClientCriteriaLazyPatcherBase.AggregatesCommonProcessingBase` descendant creates a new `In` filter operator. This operator allows users to filter the grid by the column's collection values:
+
+```cs
+public class InToAggregatePatcher : ClientCriteriaLazyPatcherBase.AggregatesCommonProcessingBase {
+
+    public static string FieldName;
+    public static string DataItemId;
+    public static CriteriaOperator Patch(CriteriaOperator source) {
+        return new InToAggregatePatcher().Process(source);
+    }
+
+    public override CriteriaOperator Visit(InOperator theOperator) {
+        var result = (InOperator)base.Visit(theOperator);
+        var property = result.LeftOperand as OperandProperty;
+        if (property?.PropertyName == FieldName && result.Operands.All(c => c is OperandValue)) {
+            var items = result.Operands.Cast<OperandValue>().Select(c => c.Value);
+            var ItemValues = items.Select(item => new OperandValue(item.GetType().GetProperty(DataItemId).GetValue(item)));
+            var inOperator = new InOperator(new OperandProperty(DataItemId), ItemValues);
+            var newOperator = CriteriaOperator.Parse(FieldName + "[" + inOperator.ToString() + "]");
+            return newOperator;
+        }
+        return result;
+    }
+}
+```
+
+Refer to the following help topic for more information: [Traverse through and modify the CriteriaOperator instances](https://supportcenter.devexpress.com/ticket/details/t320172/how-to-traverse-through-and-modify-the-criteriaoperator-instances).
 
 
 ### Customize the Drop-down Filter
@@ -98,47 +151,6 @@ internal class FilterDropDownAggregateOperatorBehavior : Behavior<GridControl> {
 ```
 
 Refer to the following help topic for more information: [Modify Theme Resources](https://docs.devexpress.com/WPF/403598/common-concepts/themes/customize-devexpress-theme-resources).
-
-
-### Implement Filter Operations
-
-Use the [GridControl.SubstituteFilter](https://docs.devexpress.com/WPF/DevExpress.Xpf.Grid.GridControl.SubstituteFilter) event to update the grid filter:
-
-```cs
-private void AssociatedObject_SubstituteFilter(object sender, DevExpress.Data.SubstituteFilterEventArgs e) {
-    InToAggregatePatcher.FieldName = CollectionColumnFieldName;
-    InToAggregatePatcher.DataItemId = DataItemId;
-    e.Filter = InToAggregatePatcher.Patch(e.Filter);
-}
-```
-
-The `ClientCriteriaLazyPatcherBase.AggregatesCommonProcessingBase` descendant creates a new `In` filter operator. This operator allows users to filter the grid by the column's collection values:
-
-```cs
-public class InToAggregatePatcher : ClientCriteriaLazyPatcherBase.AggregatesCommonProcessingBase {
-
-    public static string FieldName;
-    public static string DataItemId;
-    public static CriteriaOperator Patch(CriteriaOperator source) {
-        return new InToAggregatePatcher().Process(source);
-    }
-
-    public override CriteriaOperator Visit(InOperator theOperator) {
-        var result = (InOperator)base.Visit(theOperator);
-        var property = result.LeftOperand as OperandProperty;
-        if (property?.PropertyName == FieldName && result.Operands.All(c => c is OperandValue)) {
-            var items = result.Operands.Cast<OperandValue>().Select(c => c.Value);
-            var ItemValues = items.Select(item => new OperandValue(item.GetType().GetProperty(DataItemId).GetValue(item)));
-            var inOperator = new InOperator(new OperandProperty(DataItemId), ItemValues);
-            var newOperator = CriteriaOperator.Parse(FieldName + "[" + inOperator.ToString() + "]");
-            return newOperator;
-        }
-        return result;
-    }
-}
-```
-
-Refer to the following help topic for more information: [Traverse through and modify the CriteriaOperator instances](https://supportcenter.devexpress.com/ticket/details/t320172/how-to-traverse-through-and-modify-the-criteriaoperator-instances).
 
 
 ## Files to Review
