@@ -2,7 +2,7 @@
 [![](https://img.shields.io/badge/Open_in_DevExpress_Support_Center-FF7200?style=flat-square&logo=DevExpress&logoColor=white)](https://supportcenter.devexpress.com/ticket/details/T1141282)
 [![](https://img.shields.io/badge/📖_How_to_use_DevExpress_Examples-e9f6fc?style=flat-square)](https://docs.devexpress.com/GeneralInformation/403183)
 <!-- default badges end -->
-# Data Grid for WPF - Filter Columns of the Collection Type
+# Data Grid for WPF - Filter Collection Type Columns
 
 This example allows users to filter [GridControl](https://docs.devexpress.com/WPF/DevExpress.Xpf.Grid.GridControl) data against columns bound to a collection.
 
@@ -20,23 +20,28 @@ The DevExpress [WPF Editors](https://docs.devexpress.com/WPF/6190/controls-and-l
 
 ```xaml
 <dxg:GridColumn FieldName="Genres"
-                FilterPopupMode="Excel"
-                ImmediateUpdateColumnFilter="True">
+                FilterPopupMode="Excel">
     <dxg:GridColumn.EditSettings>
         <dxe:ComboBoxEditSettings ItemsSource="{Binding Genres}"
                                   DisplayMember="Name">
             <dxe:ComboBoxEditSettings.StyleSettings>
-                <dxe:CheckedTokenComboBoxStyleSettings FilterOutSelectedTokens="False" />
+                <dxe:CheckedTokenComboBoxStyleSettings FilterOutSelectedTokens="False"/>
             </dxe:ComboBoxEditSettings.StyleSettings>
         </dxe:ComboBoxEditSettings>
     </dxg:GridColumn.EditSettings>
 </dxg:GridColumn>
 ```
 
+Set the column's [FilterPopupMode](https://docs.devexpress.com/WPF/DevExpress.Xpf.Grid.ColumnBase.FilterPopupMode) property to `Excel` to use the customizable Excel-style drop-down filter.
+
+Refer to the following help topic for more information: [Implement multi-select in DevExpress WPF Data Editors](https://supportcenter.devexpress.com/ticket/details/t889444/how-to-implement-multi-select-when-using-devexpress-wpf-data-editors-comboboxedit).
 
 ### Populate the Column's Drop-down Filter with Collection Values
 
-The [DataViewBase.ShowFilterPopup](https://docs.devexpress.com/WPF/DevExpress.Xpf.Grid.DataViewBase.ShowFilterPopup) event handler passes the column's collection values to the [Drop-down Filter](https://docs.devexpress.com/WPF/6133/controls-and-libraries/data-grid/filtering-and-searching/drop-down-filter):
+Perform the following actions in the [DataViewBase.ShowFilterPopup](https://docs.devexpress.com/WPF/DevExpress.Xpf.Grid.DataViewBase.ShowFilterPopup) event handler:
+
+* Assign the column's `ItemsSource` collection to the [ExcelColumnFilterSettings.FilterItems](https://docs.devexpress.com/WPF/DevExpress.Xpf.Grid.ExcelColumnFilterSettings.FilterItems) property. The `GridControl` displays this collection in the column's [Drop-down Filter](https://docs.devexpress.com/WPF/6133/controls-and-libraries/data-grid/filtering-and-searching/drop-down-filter).
+* Set the [ExcelColumnFilterSettings.AllowedFilterTypes](https://docs.devexpress.com/WPF/DevExpress.Xpf.Grid.ExcelColumnFilterSettings.AllowedFilterTypes) property to `FilterValues` to display only column values in the filter popup:
 
 ```xaml
 <dxg:GridControl ...>
@@ -44,7 +49,7 @@ The [DataViewBase.ShowFilterPopup](https://docs.devexpress.com/WPF/DevExpress.Xp
         <behaviors:FilterDropDownAggregateOperatorBehavior 
             CollectionColumnFieldName="Genres" 
             DataItemId="Value" 
-            ColumnItemsSource="{Binding Genres, Converter={local:ListObjectConverter}}"/>
+            ColumnItemsSource="{Binding Genres}"/>
     </dxmvvm:Interaction.Behaviors>
 </dxg:GridControl>
 ```
@@ -64,25 +69,26 @@ internal class FilterDropDownAggregateOperatorBehavior : Behavior<GridControl> {
 
 ### Customize the Drop-down Filter
 
-Remove unsupported functionalities and set up the column's **Drop-down Filter** according to this implementation:
+* The `SearchControlContainerStyle.Visibility` property allows you to hide the search box from the popup.
+* The `ServiceValueTemplate` property is used to specify the text displayed in the **Select All** checkbox.
 
 ![image](https://user-images.githubusercontent.com/65009440/214020374-6fdf8d6a-41a5-4bc2-a9bb-3daf4e8ae1ea.png)
 
 ```xaml
-<Style x:Key="{dxgt:ExcelColumnFilterPopupThemeKey ResourceKey=SearchControlContainerStyle, IsThemeIndependent=True}" TargetType="{x:Type Grid}">
+<Style x:Key="{dxgt:ExcelColumnFilterPopupThemeKey ResourceKey=SearchControlContainerStyle, IsThemeIndependent=True}" 
+       TargetType="{x:Type Grid}">
     <Setter Property="Visibility" Value="Collapsed"/>
 </Style>
 
-<Style x:Key="{dxgt:ExcelColumnFilterPopupThemeKey ResourceKey=ValueColumnStyle, IsThemeIndependent=True}" TargetType="{x:Type dxg:TreeListColumn}">
-    <Setter Property="Width" Value="*"/>
-    <Setter Property="EditSettings" Value="{x:Null}"/> <!--Default value == {Binding ValueColumnEditSettings}-->
-    <Setter Property="ColumnFilterMode" Value="DisplayText"/>
+<Style x:Key="{dxgt:ExcelColumnFilterPopupThemeKey ResourceKey=ValueColumnStyle, IsThemeIndependent=True}" 
+       TargetType="{x:Type dxg:TreeListColumn}">
     <Setter Property="CellTemplateSelector">
         <Setter.Value>
             <dxg:ExcelColumnFilterCellTemplateSelector>
                 <dxg:ExcelColumnFilterCellTemplateSelector.ServiceValueTemplate>
                     <DataTemplate>
-                        <dxe:TextEdit EditMode="InplaceInactive" EditValue="{Binding RowData.Row.DisplayValue, Mode=OneWay}"/>
+                        <dxe:TextEdit EditValue="{Binding RowData.Row.DisplayValue, Mode=OneWay}"
+                                      ShowBorder="False"/>
                     </DataTemplate>
                 </dxg:ExcelColumnFilterCellTemplateSelector.ServiceValueTemplate>
             </dxg:ExcelColumnFilterCellTemplateSelector>
@@ -90,6 +96,8 @@ Remove unsupported functionalities and set up the column's **Drop-down Filter** 
     </Setter>
 </Style>
 ```
+
+Refer to the following help topic for more information: [Modify Theme Resources](https://docs.devexpress.com/WPF/403598/common-concepts/themes/customize-devexpress-theme-resources).
 
 
 ### Implement Filter Operations
@@ -130,44 +138,7 @@ public class InToAggregatePatcher : ClientCriteriaLazyPatcherBase.AggregatesComm
 }
 ```
 
-
-### Process Existing Filters
-
-To apply filters created outside of the column's **Drop-down Filter** (for example, created in the [Filter Editor](https://docs.devexpress.com/WPF/7788/controls-and-libraries/data-grid/filtering-and-searching/filter-editor) or code), create a behavior that parses this filter and checks items in the **Drop-down Filter** accordingly:
-
-```xaml
-<DataTemplate x:Key="{dxgt:ExcelColumnFilterPopupThemeKey ResourceKey=TreeListBehaviorTemplate, IsThemeIndependent=True}">
-    <ItemsControl>
-        <dxg:ExcelColumnFilterListBehavior/>
-        <dxg:ExcelColumnFilterMouseClickBehavior/>
-        <behaviors:ExcelColumnFilterRestoreCheckedStateBehavior DataItemId="Value"/>
-    </ItemsControl>
-</DataTemplate>
-```
-
-```cs
-public class ExcelColumnFilterRestoreCheckedStateBehavior : Behavior<TreeListView> {
-    // ...
-    void UpdateSelectionState(ExcelColumnFilterValuesListBase items, CriteriaOperator filterCriteria) {
-        var aggregateOp = filterCriteria as AggregateOperand;
-        if (ReferenceEquals(aggregateOp, null))
-            return;
-        var op = aggregateOp.Condition as InOperator;
-        if (ReferenceEquals(op, null))
-            return;
-        var values = op.Operands.OfType<OperandValue>().Select(x => x.Value).ToList();
-        foreach (var item in items) {
-            if (item.EditValue != null) {
-                var value = item.EditValue.GetType().GetProperty(DataItemId).GetValue(item.EditValue);
-                if (value == null)
-                    continue;
-                if (values.Contains(value))
-                    item.IsChecked = true;
-            }
-        }
-    }
-}
-```
+Refer to the following help topic for more information: [Traverse through and modify the CriteriaOperator instances](https://supportcenter.devexpress.com/ticket/details/t320172/how-to-traverse-through-and-modify-the-criteriaoperator-instances).
 
 
 ## Files to Review
@@ -175,10 +146,10 @@ public class ExcelColumnFilterRestoreCheckedStateBehavior : Behavior<TreeListVie
 * [MainWindow.xaml](./CS/FilterDropDown_AgregateOperators/MainWindow.xaml) (VB: [MainWindow.xaml](./VB/FilterDropDown_AgregateOperators/MainWindow.xaml))
 * [InToAggregatePatcher.cs](./CS/FilterDropDown_AgregateOperators/Behaviours/InToAggregatePatcher.cs) (VB: [InToAggregatePatcher.vb](./VB/FilterDropDown_AgregateOperators/Behaviours/InToAggregatePatcher.vb))
 * [FilterDropDownAggregateOperatorBehavior.cs](./CS/FilterDropDown_AgregateOperators/Behaviours/FilterDropDownAggregateOperatorBehavior.cs) (VB: [FilterDropDownAggregateOperatorBehavior.vb](./VB/FilterDropDown_AgregateOperators/Behaviours/FilterDropDownAggregateOperatorBehavior.vb))
-* [ExcelColumnFilterRestoreCheckedStateBehavior.cs](./CS/FilterDropDown_AgregateOperators/Behaviours/ExcelColumnFilterRestoreCheckedStateBehavior.cs) (VB: [ExcelColumnFilterRestoreCheckedStateBehavior.vb](./VB/FilterDropDown_AgregateOperators/Behaviours/ExcelColumnFilterRestoreCheckedStateBehavior.vb))
 
 
 ## Documentation
 
 - [How to traverse through and modify the CriteriaOperator instances](https://supportcenter.devexpress.com/ticket/details/t320172/how-to-traverse-through-and-modify-the-criteriaoperator-instances)
 - [Modify Theme Resources](https://docs.devexpress.com/WPF/403598/common-concepts/themes/customize-devexpress-theme-resources)
+- [Implement multi-select in DevExpress WPF Data Editors](https://supportcenter.devexpress.com/ticket/details/t889444/how-to-implement-multi-select-when-using-devexpress-wpf-data-editors-comboboxedit)
