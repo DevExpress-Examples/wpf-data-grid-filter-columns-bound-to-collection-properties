@@ -4,7 +4,7 @@
 <!-- default badges end -->
 # Data Grid for WPF - Filter Columns Bound to Collection Properties
 
-This example allows users to filter [GridControl](https://docs.devexpress.com/WPF/DevExpress.Xpf.Grid.GridControl) data against columns bound to a collection.
+The **Genres** column contains elements of the `List<object>` type. This example assigns collection editors to the column's cells and allows users to filter [GridControl](https://docs.devexpress.com/WPF/DevExpress.Xpf.Grid.GridControl) data against column values:
 
 ![image](https://user-images.githubusercontent.com/65009440/214008045-941bfb71-671e-445f-90fe-cf225dc764c0.png)
 
