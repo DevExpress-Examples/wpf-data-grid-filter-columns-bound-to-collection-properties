@@ -155,8 +155,8 @@ Refer to the following help topic for more information: [Modify Theme Resources]
 ## Files to Review
 
 * [MainWindow.xaml](./CS/FilterDropDown_AgregateOperators/MainWindow.xaml) (VB: [MainWindow.xaml](./VB/FilterDropDown_AgregateOperators/MainWindow.xaml))
-* [InToAggregatePatcher.cs](./CS/FilterDropDown_AgregateOperators/Behaviours/InToAggregatePatcher.cs) (VB: [InToAggregatePatcher.vb](./VB/FilterDropDown_AgregateOperators/Behaviours/InToAggregatePatcher.vb))
-* [FilterDropDownAggregateOperatorBehavior.cs](./CS/FilterDropDown_AgregateOperators/Behaviours/FilterDropDownAggregateOperatorBehavior.cs) (VB: [FilterDropDownAggregateOperatorBehavior.vb](./VB/FilterDropDown_AgregateOperators/Behaviours/FilterDropDownAggregateOperatorBehavior.vb))
+* [InToAggregatePatcher.cs](./CS/FilterDropDown_AgregateOperators/Behaviors/InToAggregatePatcher.cs) (VB: [InToAggregatePatcher.vb](./VB/FilterDropDown_AgregateOperators/Behaviors/InToAggregatePatcher.vb))
+* [FilterDropDownAggregateOperatorBehavior.cs](./CS/FilterDropDown_AgregateOperators/Behaviors/FilterDropDownAggregateOperatorBehavior.cs) (VB: [FilterDropDownAggregateOperatorBehavior.vb](./VB/FilterDropDown_AgregateOperators/Behaviors/FilterDropDownAggregateOperatorBehavior.vb))
 
 
 ## Documentation
