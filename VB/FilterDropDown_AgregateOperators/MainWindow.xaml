@@ -22,6 +22,7 @@
 
         <Style x:Key="{dxgt:ExcelColumnFilterPopupThemeKey ResourceKey=ValueColumnStyle, IsThemeIndependent=True}" 
                TargetType="{x:Type dxg:TreeListColumn}">
+            <Setter Property="Width" Value="*"/>
             <Setter Property="CellTemplateSelector">
                 <Setter.Value>
                     <dxg:ExcelColumnFilterCellTemplateSelector>
